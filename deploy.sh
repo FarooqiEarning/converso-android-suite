@@ -5,11 +5,16 @@ PRINT_COLOR() { printf "\e[1;36m$1\e[0m\n"; }
 
 PRINT_COLOR "🚀 Initiating Converso Empire Deployment..."
 
-1. Build Android APK
-PRINT_COLOR "📦 Building Android Remote Agent..."
-cd mobile
-./gradlew assembleRelease
-cd ..
+# 1. Build Android APK
+if [ -f "mobile/gradlew" ]; then
+    PRINT_COLOR "📦 Building Android Remote Agent..."
+    cd mobile
+    chmod +x gradlew
+    ./gradlew assembleRelease
+    cd ..
+else
+    PRINT_COLOR "⚠️  Skipping Android Build: Gradle wrapper not found in mobile/ directory."
+fi
 
 # 2. Dynamic Environment Resolution
 PRINT_COLOR "🔧 Configuring Production Environment..."
