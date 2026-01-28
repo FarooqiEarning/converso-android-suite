@@ -27,7 +27,7 @@ git clone https://github.com/FarooqiEarning/converso-android-suite.git
 cd converso-android-suite
 
 # Use the master deployment script
-./deploy.sh
+sudo bash deploy.sh
 ```
 
 ## 🔐 Security & Permissions

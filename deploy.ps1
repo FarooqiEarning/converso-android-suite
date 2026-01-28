@@ -10,11 +10,11 @@ cd ..
 
 # 2. Master Docker Build
 Write-Host "🐳 Building Docker Containers..." -ForegroundColor Yellow
-docker-compose build --parallel
+sudo docker compose build --parallel
 
 # 3. Global Orchestration Up
 Write-Host "🚢 Deploying Converso Suite to Docker..." -ForegroundColor Yellow
-docker-compose up -d
+sudo docker compose up -d
 
 Write-Host "✨ DEPLOYMENT COMPLETE!" -ForegroundColor Green
 Write-Host "User Dashboard:  http://localhost:9082"

@@ -20,9 +20,9 @@ fi
 
 # 3. Docker Orchestration
 PRINT_COLOR "🐋 Building & Starting Containers..."
-docker-compose down
-docker-compose build --parallel
-docker-compose up -d
+sudo docker compose down
+sudo docker compose build --parallel
+sudo docker compose up -d
 
 PRINT_COLOR "✅ Deployment Successful!"
 PRINT_COLOR "--------------------------------------------"
