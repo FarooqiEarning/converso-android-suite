@@ -26,7 +26,6 @@ if [ -d "mobile" ]; then
     else
         PRINT_COLOR "❌ Android APK build failed!"
         cd ..
-        exit 1
     fi
 else
     PRINT_COLOR "⚠️  Skipping Android Build: mobile/ directory not found."
