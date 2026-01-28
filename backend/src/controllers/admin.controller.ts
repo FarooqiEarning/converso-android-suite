@@ -25,7 +25,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 
 export const updateUserStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { userId } = req.params;
+        const userId = req.params.userId as string;
         const { status } = req.body; // ACTIVE, SUSPENDED, DELETED
 
         const user = await prisma.user.update({
@@ -59,7 +59,7 @@ export const getAllDevices = async (req: Request, res: Response, next: NextFunct
 
 export const updateDeviceStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { deviceId } = req.params;
+        const deviceId = req.params.deviceId as string;
         const { status } = req.body; // ACTIVE, PAUSED, BLOCKED, DELETED
 
         const device = await prisma.device.update({
@@ -94,7 +94,7 @@ export const getPendingPayments = async (req: Request, res: Response, next: Next
 
 export const verifyPayment = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { paymentId } = req.params;
+        const paymentId = req.params.paymentId as string;
         const { approved, notes } = req.body;
         const adminId = (req as any).user.id;
 
@@ -138,7 +138,7 @@ export const verifyPayment = async (req: Request, res: Response, next: NextFunct
 
                 // Ensure device is active
                 await tx.device.update({
-                    where: { id: payment.subscription.deviceId },
+                    where: { id: (payment as any).subscription.deviceId },
                     data: { status: 'ACTIVE' }
                 });
 

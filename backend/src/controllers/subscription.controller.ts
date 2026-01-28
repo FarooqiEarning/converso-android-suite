@@ -38,7 +38,7 @@ export const createSubscriptionSlot = async (req: Request, res: Response, next: 
         }
 
         // Check if subscription already exists for this device
-        const existing = await prisma.subscription.findUnique({
+        const existing = await prisma.subscription.findFirst({
             where: { deviceId }
         });
 

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { socketService } from '../services/socket';
 import {
     Lock, Power, RotateCw, Volume2, VolumeX,
-    Smartphone, Wifi, Activity,
+    Smartphone, Wifi, Activity
 } from 'lucide-react';
 
 interface RemoteControlProps {

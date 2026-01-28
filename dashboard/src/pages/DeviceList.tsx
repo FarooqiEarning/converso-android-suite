@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
-import { Smartphone, CheckCircle, XCircle, Plus } from 'lucide-react';
+import { Smartphone, Plus } from 'lucide-react';
 import AddDeviceModal from '../components/AddDeviceModal';
 
 interface DeviceListProps {

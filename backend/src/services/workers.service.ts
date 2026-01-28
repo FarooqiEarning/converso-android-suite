@@ -97,7 +97,7 @@ class WorkersService {
             });
 
             const deletedCommands = await prisma.commandLog.deleteMany({
-                where: { createdAt: { lt: thirtyDaysAgo } }
+                where: { executedAt: { lt: thirtyDaysAgo } }
             });
 
             logger.info(`Cleanup complete: Removed ${deletedTelemetry.count} telemetry rows and ${deletedCommands.count} command logs.`);
