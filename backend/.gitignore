@@ -1,0 +1,16 @@
+# Backend - GitIgnore
+node_modules/
+dist/
+.env
+*.db
+*.sqlite
+prisma/migrations/
+!prisma/schema.prisma
+
+# Logging
+logs/
+*.log
+
+# Sensitive
+cert/
+keys/

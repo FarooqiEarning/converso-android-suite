@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: converso-db
+    restart: always
+    environment:
+      POSTGRES_USER: converso
+      POSTGRES_PASSWORD: converso_password
+      POSTGRES_DB: converso_suite
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U converso -d converso_suite"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: converso-redis
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: converso-backend
+    restart: always
+    ports:
+      - "9081:9081"
+    environment:
+      DATABASE_URL: postgresql://converso:converso_password@db:5432/converso_suite
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: production_secret_change_me_now
+      PORT: 9081
+      ALLOWED_ORIGINS: "*"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: converso-dashboard
+    restart: always
+    ports:
+      - "9082:9082"
+    environment:
+      VITE_API_URL: http://localhost:9081
+      VITE_SOCKET_URL: http://localhost:9081
+    depends_on:
+      - backend
+
+  admin-dashboard:
+    build:
+      context: ./admin-dashboard
+      dockerfile: Dockerfile
+    container_name: converso-admin
+    restart: always
+    ports:
+      - "9083:9083"
+    environment:
+      VITE_API_URL: http://localhost:9081
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

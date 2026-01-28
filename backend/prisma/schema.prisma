@@ -1,0 +1,188 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  fullName      String?
+  status        UserStatus     @default(ACTIVE)
+  createdAt     DateTime       @default(now())
+  lastLogin     DateTime?
+  devices       Device[]
+  subscriptions Subscription[]
+  payments      Payment[]
+  activityLogs  ActivityLog[]
+  notifications Notification[]
+  AdminUser     AdminUser?
+
+  @@index([email])
+  @@index([status])
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+model Device {
+  id               String            @id @default(uuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name             String?
+  deviceId         String            @unique // Hardware ID from Android
+  manufacturer     String?
+  model            String?
+  androidVersion   String?
+  screenResolution String?
+  registeredAt     DateTime          @default(now())
+  lastOnline       DateTime?
+  isOnline         Boolean           @default(false)
+  status           DeviceStatus      @default(ACTIVE)
+  deviceToken      String?           @db.Text
+  telemetry        DeviceTelemetry[]
+  commandLogs      CommandLog[]
+  subscriptions    Subscription[]
+  activityLogs     ActivityLog[]
+
+  @@index([deviceId])
+  @@index([userId])
+  @@index([status])
+  @@index([isOnline])
+}
+
+enum DeviceStatus {
+  ACTIVE
+  PAUSED
+  BLOCKED
+  DELETED
+}
+
+model Subscription {
+  id            String             @id @default(uuid())
+  deviceId      String
+  device        Device             @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startDate     DateTime
+  endDate       DateTime
+  price         Decimal            @default(25.00)
+  status        SubscriptionStatus @default(ACTIVE)
+  paymentStatus PaymentStatus      @default(PENDING)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  payments      Payment[]
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  PAUSED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+model Payment {
+  id             String         @id @default(uuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id])
+  subscriptionId String
+  subscription   Subscription   @relation(fields: [subscriptionId], references: [id])
+  amount         Decimal
+  paymentDate    DateTime       @default(now())
+  paymentMethod  String?
+  proofUrl       String?
+  verifiedBy     String?
+  verifiedAt     DateTime?
+  status         PaymentProcess @default(PENDING)
+  notes          String?        @db.Text
+}
+
+enum PaymentProcess {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+model DeviceTelemetry {
+  id              BigInt   @id @default(autoincrement())
+  deviceId        String
+  device          Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  timestamp       DateTime @default(now())
+  batteryLevel    Int?
+  cpuUsage        Decimal?
+  ramUsedMb       Int?
+  ramTotalMb      Int?
+  storageUsedGb   Int?
+  storageTotalGb  Int?
+  networkType     String?
+  ipAddress       String?
+  locationLat     Decimal?
+  locationLon     Decimal?
+
+  @@index([deviceId, timestamp])
+}
+
+model CommandLog {
+  id            BigInt   @id @default(autoincrement())
+  deviceId      String
+  device        Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  userId        String?
+  commandType   String
+  commandParams Json?
+  executedAt    DateTime @default(now())
+  status        String   @default("SENT") // SENT, EXECUTING, COMPLETED, FAILED
+  result        Json?
+  errorMessage  String?  @db.Text
+}
+
+model ActivityLog {
+  id        BigInt   @id @default(autoincrement())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  deviceId  String?
+  device    Device?  @relation(fields: [deviceId], references: [id])
+  action    String
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceId  String?
+  type      String   // PAYMENT_REMINDER, DEVICE_OFFLINE, SUBSCRIPTION_EXPIRING
+  title     String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model AdminUser {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  role        String   @default("ADMIN") // ADMIN, SUPER_ADMIN
+  permissions Json?    @default("[]")
+  createdAt   DateTime @default(now())
+}
+
+model GlobalConfig {
+  key         String   @id
+  value       String   @db.Text
+  updatedAt   DateTime @updatedAt
+}

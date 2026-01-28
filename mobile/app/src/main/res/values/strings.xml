@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Converso</string>
+    <string name="accessibility_service_label">Converso Remote Control</string>
+    <string name="accessibility_service_description">Allows Converso to simulate touch events and hardware buttons for remote management.</string>
+</resources>
