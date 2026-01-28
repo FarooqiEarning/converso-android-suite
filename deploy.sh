@@ -8,25 +8,24 @@ PRINT_COLOR "🚀 Initiating Converso Empire Deployment..."
 # 1. Build Android APK
 if [ -d "mobile" ]; then
     PRINT_COLOR "📦 Building Android Remote Agent..."
-    cd mobile || exit 1
+    cd mobile
     
     # Initialize gradle wrapper if it doesn't exist
     if [ ! -f "gradlew" ]; then
         PRINT_COLOR "🔧 Initializing Gradle wrapper..."
-        gradle wrapper --gradle-version 8.1.1 || {
+        gradle wrapper --gradle-version 8.2 || {
             PRINT_COLOR "❌ Failed to initialize Gradle wrapper!"
-            cd .. || exit 1
-            exit 1
+            cd ..
         }
     fi
     
     chmod +x gradlew
     if ./gradlew assembleRelease; then
         PRINT_COLOR "✅ Android APK built successfully!"
-        cd .. || exit 1
+        cd ..
     else
         PRINT_COLOR "❌ Android APK build failed!"
-        cd .. || exit 1
+        cd ..
         exit 1
     fi
 else
