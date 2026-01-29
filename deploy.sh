@@ -10,7 +10,40 @@ if [ -d "mobile" ]; then
     PRINT_COLOR "📦 Building Android Remote Agent..."
     cd mobile
     
-    # Initialize gradle wrapper if it doesn't exist or JAR is missing
+    # 1. Ensure Android SDK is configured
+    if [ ! -f "local.properties" ]; then
+        PRINT_COLOR "🔍 Detecting Android SDK..."
+        SDK_PATH=""
+        POSSIBLE_PATHS=(
+            "$HOME/Android/Sdk"
+            "/usr/lib/android-sdk"
+            "/opt/android-sdk"
+            "/usr/local/lib/android-sdk"
+        )
+
+        for path in "${POSSIBLE_PATHS[@]}"; do
+            if [ -d "$path" ]; then
+                SDK_PATH="$path"
+                break
+            fi
+        done
+
+        if [ -n "$SDK_PATH" ]; then
+            PRINT_COLOR "✅ Found SDK at $SDK_PATH"
+            echo "sdk.dir=$SDK_PATH" > local.properties
+        else
+            PRINT_COLOR "⚠️  Android SDK not found in common locations."
+            PRINT_COLOR "Please enter your Android SDK path (e.g., /home/owner/Android/Sdk):"
+            read -r SDK_PATH
+            if [ -d "$SDK_PATH" ]; then
+                echo "sdk.dir=$SDK_PATH" > local.properties
+            else
+                PRINT_COLOR "❌ Invalid SDK path. Build will likely fail."
+            fi
+        fi
+    fi
+
+    # 2. Initialize gradle wrapper if it doesn't exist or JAR is missing
     if [ ! -f "gradlew" ] || [ ! -f "gradle/wrapper/gradle-wrapper.jar" ]; then
         PRINT_COLOR "🔧 Initializing Gradle wrapper..."
         
@@ -59,7 +92,7 @@ sudo docker compose up -d
 
 PRINT_COLOR "✅ Deployment Successful!"
 PRINT_COLOR "--------------------------------------------"
-PRINT_COLOR "Backend:   https://backend.as.conversoempire.world"
+PRINT_COLOR "Backend:   https://backend-as.conversoempire.world"
 PRINT_COLOR "User App:  https://as.conversoempire.world"
-PRINT_COLOR "Admin App: https://admin.as.conversoempire.world"
+PRINT_COLOR "Admin App: https://admin-as.conversoempire.world"
 PRINT_COLOR "--------------------------------------------"

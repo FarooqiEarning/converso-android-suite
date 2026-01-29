@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'https://backend.as.conversoempire.world/api',
+    baseURL: import.meta.env.VITE_API_URL || 'https://backend-as.conversoempire.world/api',
 });
 
 // Interceptor to add auth token if needed

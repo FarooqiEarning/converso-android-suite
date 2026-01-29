@@ -54,8 +54,8 @@ services:
     ports:
       - "9082:9082"
     environment:
-      VITE_API_URL: https://backend.as.conversoempire.world
-      VITE_SOCKET_URL: https://backend.as.conversoempire.world
+      VITE_API_URL: https://backend-as.conversoempire.world
+      VITE_SOCKET_URL: https://backend-as.conversoempire.world
     depends_on:
       - backend
 
@@ -68,7 +68,7 @@ services:
     ports:
       - "9083:9083"
     environment:
-      VITE_API_URL: https://backend.as.conversoempire.world
+      VITE_API_URL: https://backend-as.conversoempire.world
     depends_on:
       - backend
 

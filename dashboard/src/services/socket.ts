@@ -6,7 +6,7 @@ class SocketService {
     connect(token: string) {
         if (this.socket?.connected) return;
 
-        this.socket = io(import.meta.env.VITE_SOCKET_URL || 'https://backend.as.conversoempire.world', {
+        this.socket = io(import.meta.env.VITE_SOCKET_URL || 'https://backend-as.conversoempire.world', {
             auth: { token },
             reconnection: true,
             reconnectionAttempts: Infinity,
