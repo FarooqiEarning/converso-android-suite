@@ -2,19 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Network Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <uses-permission android:name="android.permission.PROJECT_MEDIA" tools:ignore="ProtectedPermissions" />
-    
-    <!-- Hardware Control Permissions -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    
+    <!-- Bluetooth Permissions -->
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    
+    <!-- Service & Background Permissions -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
+    <!-- Camera Permission (for QR Scanner) -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- Media Projection -->
+    <uses-permission android:name="android.permission.PROJECT_MEDIA" tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -25,50 +35,66 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Converso"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         
+        <!-- Main Activity -->
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.ScannerActivity" />
-        <activity android:name=".ui.PermissionsActivity" />
-        <activity android:name=".ui.StatusActivity" />
+        <!-- QR Scanner Activity -->
+        <activity 
+            android:name=".ui.ScannerActivity"
+            android:screenOrientation="portrait" />
 
+        <!-- Permissions Setup Activity -->
+        <activity 
+            android:name=".ui.PermissionsActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Status Dashboard Activity -->
+        <activity 
+            android:name=".ui.StatusActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- Foreground Service for Screen Capture -->
         <service
             android:name=".service.ForegroundService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
 
+        <!-- Background Service for WebSocket Communication -->
         <service
             android:name=".service.BackgroundService"
             android:enabled="true"
             android:exported="false" />
 
-        <!-- Enterprise Accessibility Service -->
+        <!-- Accessibility Service for Remote Control -->
         <service
             android:name=".service.ConversoAccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:label="@string/accessibility_service_label"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.view.accessibility.AccessibilityService" />
+                <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
             <meta-data
-                android:name="android.view.accessibility.accessibility_service"
+                android:name="android.accessibilityservice.accessibility_service"
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <!-- Enterprise Notification Listener -->
+        <!-- Notification Listener Service -->
         <service
             android:name=".service.ConversoNotificationListener"
-            android:label="Converso Notification Monitor"
+            android:label="@string/notification_listener_label"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:exported="true">
             <intent-filter>

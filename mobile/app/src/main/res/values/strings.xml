@@ -1,5 +1,43 @@
 <resources>
     <string name="app_name">Converso</string>
+    
+    <!-- Accessibility Service -->
     <string name="accessibility_service_label">Converso Remote Control</string>
-    <string name="accessibility_service_description">Allows Converso to simulate touch events and hardware buttons for remote management.</string>
+    <string name="accessibility_service_description">Allows Converso to simulate touch events and hardware buttons for remote management. This service is required for remote device control features.</string>
+    
+    <!-- Notification Listener -->
+    <string name="notification_listener_label">Converso Notification Monitor</string>
+    <string name="notification_listener_description">Monitors device notifications for remote dashboard synchronization</string>
+    
+    <!-- Common Strings -->
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connecting">Connecting…</string>
+    <string name="error_connection">Connection Error</string>
+    <string name="retry">Retry</string>
+    
+    <!-- Status Messages -->
+    <string name="status_online">Online</string>
+    <string name="status_offline">Offline</string>
+    <string name="subscription_active">Active</string>
+    <string name="subscription_expired">Expired</string>
+    
+    <!-- Buttons -->
+    <string name="btn_start_service">Start Service</string>
+    <string name="btn_stop_service">Stop Service</string>
+    <string name="btn_configure">Configure Server</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_enable_accessibility">Enable Remote Control</string>
+    <string name="btn_enable_notifications">Enable Notifications</string>
+    <string name="btn_disable_battery_optimization">Disable Power Savings</string>
+    
+    <!-- Permissions Screen -->
+    <string name="permissions_title">System Permissions</string>
+    <string name="permissions_subtitle">Grant the following to enable control</string>
+    
+    <!-- Status Screen -->
+    <string name="owner_label">Owner: %s</string>
+    <string name="subscription_label">Subscription: %s</string>
+    <string name="latency_label">Latency: %dms</string>
+    <string name="bitrate_label">Bitrate: %.1f Mbps</string>
 </resources>
