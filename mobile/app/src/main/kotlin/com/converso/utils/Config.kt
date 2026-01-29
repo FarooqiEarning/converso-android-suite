@@ -47,7 +47,7 @@ object Config {
     }
 
     fun getWebSocketUrl(context: Context): String {
-        val baseUrl = getServerUrl(context) ?: "http://localhost:5000"
+        val baseUrl = getServerUrl(context) ?: "https://backend.as.conversoempire.world"
         return baseUrl.replace("http://", "ws://").replace("https://", "wss://")
     }
     
